@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Fitness.BL.Model
 {
-    class User
+    [Serializable]
+    public class User
     {
-        #region Свойства
+         #region Свойства
         /// <summary>
         /// Имя.
         /// </summary>
@@ -16,11 +17,11 @@ namespace Fitness.BL.Model
         /// <summary>
         /// Пол.
         /// </summary>
-        public Gender Gender { get; }
+        public Gender Gender { get; set; }
         /// <summary>
         /// Дата рождения.
         /// </summary>
-        public DateTime BirthDate { get; }
+        public DateTime BirthDate { get; set; }
         /// <summary>
         /// Вес.
         /// </summary>
@@ -29,6 +30,7 @@ namespace Fitness.BL.Model
         /// Рост.
         /// </summary>
         public double Height { get; set; }
+        public int Age { get { return DateTime.Now.Year - BirthDate.Year; } }
         #endregion
         /// <summary>
         /// Создание нового пользователя
@@ -44,7 +46,7 @@ namespace Fitness.BL.Model
             double weight,
             double height)
         {
-#region Проверка условий
+            #region Проверка условий
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentNullException("Имя пользователя не может быть пустым или null.", nameof(name));
@@ -65,16 +67,25 @@ namespace Fitness.BL.Model
             {
                 throw new ArgumentException("Рост не может быть меньше либо равен 0.", nameof(height));
             }
-#endregion 
+            #endregion
             Name = name;
             Gender = gender;
             BirthDate = birthDate;
             Weight = weight;
             Height = height;
         }
+        public User(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentNullException("Имя пользователя не может быть пустым или null.", nameof(name));
+            }
+
+            Name = name;
+        }
         public override string ToString()
         {
-            return base.ToString();
+            return Name + " " + Age;
         }
     }
 }
